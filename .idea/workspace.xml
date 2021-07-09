@@ -2,10 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="9a25077a-9b26-4ac2-b948-b3b505cdb32a" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/validate/authRegister.validate.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/validate/authLogin.validate.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routers/api/register.js" beforeDir="false" afterPath="$PROJECT_DIR$/routers/api/register.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server.js" beforeDir="false" afterPath="$PROJECT_DIR$/server.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/routers/api/login.js" beforeDir="false" afterPath="$PROJECT_DIR$/routers/api/login.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/validate/authRegister.validate.js" beforeDir="false" afterPath="$PROJECT_DIR$/validate/authRegister.validate.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
