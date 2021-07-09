@@ -1,8 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
-AuthUser = require('../../models/auth-users');
-router.post('/', async (req,res)=>{
+const AuthUser = require('../../models/auth-users');
+const ValidateRegister = require('../../validate/authRegister.validate');
+router.post('/',ValidateRegister.postRegister,async (req,res)=>{
    try{
        const username = req.body.username;
        const plainTextPassword = req.body.password;
