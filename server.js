@@ -3,6 +3,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const app = express();
+app.use(cors());
 app.use(express.json());
 app.get('/',(req,res) => {
     res.send('Blog CodingCLub');
@@ -28,9 +29,4 @@ app.listen(PORT,()=>{
 });
 
 //Cors
-app.use(cors());
-app.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', '*');
-    res.append('Access-Control-Allow-Headers', 'Content-Type');
-    next();
-})
+

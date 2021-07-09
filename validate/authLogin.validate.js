@@ -3,10 +3,14 @@ module.exports.postLogin = function (req, res, next ){
     const username = req.body.username;
     const password = req.body.password;
     if(!username || typeof username !== "string" || reg_username.test(username)==false){
-        res.json({status: 'error', error: 'Invalid username'});
+        return res.status(400).send({
+            message: 'This is an error!'
+        });
     };
     if(!password || typeof password !=="string" || password.length<5){
-        res.json({status:"error", error: "Invalid password"});
-    };
+        return res.status(400).send({
+            message: 'This is an error!'
+        });
+    }
     next();
 }

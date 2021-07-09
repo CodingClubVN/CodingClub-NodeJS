@@ -21,7 +21,9 @@ router.post('/',validateLogin.postLogin, async (req,res)=>{
             res.status(200).json({token: token, success:true});
         }
         if(await bcrypt.compare(password,user.password)==false) {
-            res.json({success: false, msg: "password is incorrect"});
+            return res.status(400).send({
+                message: 'This is an error!'
+            });
         }
     }catch (err) {
             res.status(400).json({msg:err, success:false});
