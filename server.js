@@ -11,8 +11,9 @@ app.get('/',(req,res) => {
 });
 //Router
 const RegisterRouter = require('./routers/api/register');
-
-
+const LoginRouter = require('./routers/api/login');
+app.use('/api/auth/register', RegisterRouter);
+app.use('/api/auth/login', LoginRouter);
 //Mongodb
 mongoose.connect(process.env.MONGO_URL_LOCAL,{
     useNewUrlParser: true,
@@ -27,7 +28,7 @@ const PORT = process.env.PORT || 5000
 app.listen(PORT,()=>{
     console.log(`App listen at http://localhost:${PORT}`)
 });
-app.use('/api/auth/register', RegisterRouter);
+
 //Cors
 app.use(cors());
 app.use((req, res, next) => {

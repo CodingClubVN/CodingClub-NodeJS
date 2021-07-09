@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
 AuthUser = require('../../models/auth-users');
-
 router.post('/', async (req,res)=>{
    try{
        const username = req.body.username;
@@ -20,4 +19,4 @@ router.post('/', async (req,res)=>{
        res.status(400).json({msg : err});
    }
 })
-module.exports = router ;
+module.exports = router;
