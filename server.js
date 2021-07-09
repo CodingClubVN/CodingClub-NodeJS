@@ -3,13 +3,16 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const app = express();
-
-
+app.use(cors());
 app.use(express.json());
 app.get('/',(req,res) => {
     res.send('Blog CodingCLub');
 });
-
+//Router
+const RegisterRouter = require('./routers/api/register');
+const LoginRouter = require('./routers/api/login');
+app.use('/api/auth/register', RegisterRouter);
+app.use('/api/auth/login', LoginRouter);
 //Mongodb
 mongoose.connect(process.env.MONGO_URL_LOCAL,{
     useNewUrlParser: true,
@@ -26,9 +29,4 @@ app.listen(PORT,()=>{
 });
 
 //Cors
-app.use(cors());
-app.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', '*');
-    res.append('Access-Control-Allow-Headers', 'Content-Type');
-    next();
-})
+
