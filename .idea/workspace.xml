@@ -2,12 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="9a25077a-9b26-4ac2-b948-b3b505cdb32a" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/routers/api/change-password.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/validate/authChangePassword.validate.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/auth-users.js" beforeDir="false" afterPath="$PROJECT_DIR$/models/auth-users.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routers/api/login.js" beforeDir="false" afterPath="$PROJECT_DIR$/routers/api/login.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routers/api/register.js" beforeDir="false" afterPath="$PROJECT_DIR$/routers/api/register.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/validate/authLogin.validate.js" beforeDir="false" afterPath="$PROJECT_DIR$/validate/authLogin.validate.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/validate/authRegister.validate.js" beforeDir="false" afterPath="$PROJECT_DIR$/validate/authRegister.validate.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server.js" beforeDir="false" afterPath="$PROJECT_DIR$/server.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -27,7 +25,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../Hoc_bala/test_A_api/node-auth-youtube" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
