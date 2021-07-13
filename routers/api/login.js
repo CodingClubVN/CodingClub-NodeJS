@@ -22,7 +22,7 @@ router.post('/',validateLogin.postLogin, async (req,res)=>{
         }
         if(await bcrypt.compare(password,user.password)==false) {
             return res.status(400).send({
-                message: 'This is an error!'
+                message: 'Incorrect password!'
             });
         }
     }catch (err) {

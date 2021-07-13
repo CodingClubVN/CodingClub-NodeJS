@@ -7,15 +7,22 @@ router.post('/',ValidateRegister.postRegister,async (req,res)=>{
    try{
        const username = req.body.username;
        const plainTextPassword = req.body.password;
+       const firstname = req.body.firstname;
+       const lastname = req.body.lastname;
+       const phone = req.body.phone;
+       const email = req.body.phone;
        const password = await bcrypt.hash(plainTextPassword,10);
-       //console.log(password);
        const newAuthUser = new AuthUser({
            username: username,
-           password: password
+           password: password,
+           firstname: firstname,
+           lastname: lastname,
+           phone: phone,
+           email: email
        });
        const auth = await newAuthUser.save();
        if(!auth) throw Error('has a error when save the data');
-       res.status(200).json(auth);
+       res.status(200).json({success: true});
    }catch (err) {
        res.status(400).json({msg : err});
    }
