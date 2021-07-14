@@ -18,6 +18,16 @@ module.exports.postRegister = async function(req,res, next) {
                 message: 'username exists!'
             });
         }
+        if(a.phone == phone){
+            return res.status(400).send({
+                message: 'phone exists!'
+            });
+        }
+        if(a.email == email){
+            return res.status(400).send({
+                message: 'email exists!'
+            });
+        }
     };
     if(!username || typeof username !== "string" || reg_username.test(username)==false){
         return res.status(400).send({

@@ -10,7 +10,7 @@ router.post('/',ValidateRegister.postRegister,async (req,res)=>{
        const firstname = req.body.firstname;
        const lastname = req.body.lastname;
        const phone = req.body.phone;
-       const email = req.body.phone;
+       const email = req.body.email;
        const password = await bcrypt.hash(plainTextPassword,10);
        const newAuthUser = new AuthUser({
            username: username,
