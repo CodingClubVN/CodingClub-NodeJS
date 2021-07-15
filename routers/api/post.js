@@ -3,10 +3,12 @@ const router = express.Router();
 const cloudinary = require('../../utils/cloudinary');
 const upload = require('../../utils/multer');
 const Posts = require('../../models/post');
-
+const jwt = require('jsonwebtoken')
 //Post
 router.post('/',upload.array("image"),async (req, res) =>{
     try {
+        const token = req.body.token;
+        const user = jwt.verify(token,process.env.JWT_SECRET);
         let path = [];
         let cloudinaryId = [];
         for(const file of req.files){
@@ -15,7 +17,7 @@ router.post('/',upload.array("image"),async (req, res) =>{
             cloudinaryId.push(result.public_id);
         }
         const newPost = new Posts({
-            username: req.body.username,
+            username: user.username,
             image: {Array_Img: path, Array_CloudinaryId: cloudinaryId},
             status: req.body.status
         })
