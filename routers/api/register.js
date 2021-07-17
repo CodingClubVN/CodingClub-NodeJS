@@ -11,6 +11,7 @@ router.post('/',ValidateRegister.postRegister,async (req,res)=>{
        const lastname = req.body.lastname;
        const phone = req.body.phone;
        const email = req.body.email;
+       const avatar = 'https://res.cloudinary.com/awi-ln/image/upload/v1626535357/avatar_t6zlhg.png';
        const password = await bcrypt.hash(plainTextPassword,10);
        const newAuthUser = new AuthUser({
            username: username,
@@ -18,7 +19,8 @@ router.post('/',ValidateRegister.postRegister,async (req,res)=>{
            firstname: firstname,
            lastname: lastname,
            phone: phone,
-           email: email
+           email: email,
+           avatar: avatar
        });
        const auth = await newAuthUser.save();
        if(!auth) throw Error('has a error when save the data');
