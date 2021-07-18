@@ -4,6 +4,7 @@ const cloudinary = require('../../utils/cloudinary');
 const upload = require('../../utils/multer');
 const Posts = require('../../models/post');
 const jwt = require('jsonwebtoken')
+const checkToken = require('../../validate/checkToken');
 //Post
 router.post('/',upload.array("image"),async (req, res) =>{
     try {
@@ -39,7 +40,7 @@ router.get('/', async (req, res) =>{
     }
 })
 //Get /:user
-router.get('/:user', async (req, res)=>{
+router.get('/:user',checkToken.checkToken, async (req, res)=>{
     try{
         const post = await Posts.findOne(
             {username: req.params.user}
@@ -51,7 +52,7 @@ router.get('/:user', async (req, res)=>{
     }
 })
 //Delete
-router.delete('/:user', async (req, res)=>{
+router.delete('/:user',checkToken.checkToken, async (req, res)=>{
     try{
         const post = await Posts.findOne(
             {username: req.params.user}
