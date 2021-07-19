@@ -2,12 +2,13 @@ const express = require('express');
 const router = express.Router();
 const cloudinary = require('../../utils/cloudinary');
 const upload = require('../../utils/multer');
-const Posts = require('../../models/post');
+const Posts = require('../../models/posts');
 const jwt = require('jsonwebtoken')
 const checkToken = require('../../validate/checkToken');
 //Post
 router.post('/',upload.array("image"),async (req, res) =>{
     try {
+        const today = new Date();
         const token = req.body.token;
         const user = jwt.verify(token,process.env.JWT_SECRET);
         let path = [];
@@ -20,7 +21,8 @@ router.post('/',upload.array("image"),async (req, res) =>{
         const newPost = new Posts({
             username: user.username,
             image: {Array_Img: path, Array_CloudinaryId: cloudinaryId},
-            status: req.body.status
+            status: req.body.status,
+            day_post: today
         })
         const post = await newPost.save();
         if(!post) throw Error('has a error when save the data');
@@ -40,7 +42,7 @@ router.get('/', async (req, res) =>{
     }
 })
 //Get /:user
-router.get('/:user',checkToken.checkToken, async (req, res)=>{
+router.get('/:user', async (req, res)=>{
     try{
         const post = await Posts.findOne(
             {username: req.params.user}

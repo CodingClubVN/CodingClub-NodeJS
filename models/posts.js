@@ -3,7 +3,8 @@ const Image = require('../models/data-type/image');
 var postSchema = new mongoose.Schema({
     username: String,
     image: Image,
-    status: String
+    status: String,
+    day_post: Date,
 })
 
 var Posts = mongoose.model('Posts',postSchema,'posts');
