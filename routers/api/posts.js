@@ -9,7 +9,7 @@ const checkToken = require('../../validate/checkToken');
 router.post('/',checkToken.checkToken,upload.array("image"),async (req, res) =>{
     try {
         const today = new Date();
-        const token = req.header('authorization');;
+        const token = req.headers['authorization'].split(' ')[1];
         const user = jwt.verify(token,process.env.JWT_SECRET);
         let path = [];
         let cloudinaryId = [];
