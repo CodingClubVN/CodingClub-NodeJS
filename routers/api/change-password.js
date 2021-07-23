@@ -7,7 +7,7 @@ const jwt = require('jsonwebtoken');
 const validateChangePassword = require('../../validate/authChangePassword.validate');
 router.post('/',validateChangePassword.postNewPassword ,async (req,res)=>{
     try{
-        const token = req.body.token;
+        const token = req.header('authorization');
         const newPassword = req.body.newPassword;
         const user = jwt.verify(token,process.env.JWT_SECRET);
         const _id = user.id ;

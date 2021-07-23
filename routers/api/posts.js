@@ -6,10 +6,10 @@ const Posts = require('../../models/posts');
 const jwt = require('jsonwebtoken')
 const checkToken = require('../../validate/checkToken');
 //Post
-router.post('/',upload.array("image"),async (req, res) =>{
+router.post('/',checkToken.checkToken,upload.array("image"),async (req, res) =>{
     try {
         const today = new Date();
-        const token = req.body.token;
+        const token = req.header('authorization');;
         const user = jwt.verify(token,process.env.JWT_SECRET);
         let path = [];
         let cloudinaryId = [];
