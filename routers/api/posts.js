@@ -44,7 +44,7 @@ router.get('/', async (req, res) =>{
 //Get /:user
 router.get('/:user', async (req, res)=>{
     try{
-        const post = await Posts.findOne(
+        const post = await Posts.find(
             {username: req.params.user}
         )
         if (!post) throw Error('This post does not exist');
@@ -54,11 +54,9 @@ router.get('/:user', async (req, res)=>{
     }
 })
 //Delete
-router.delete('/:user',checkToken.checkToken, async (req, res)=>{
+router.delete('/:id',checkToken.checkToken, async (req, res)=>{
     try{
-        const post = await Posts.findOne(
-            {username: req.params.user}
-        )
+        const post = await Posts.findById(req.params.id);
         for (var id of post.image.Array_CloudinaryId){
             await cloudinary.uploader.destroy(id);
         }
