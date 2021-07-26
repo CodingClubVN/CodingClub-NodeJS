@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
 const AuthUser = require('../../models/auth-users');
+const Image = require('../../models/data-type/image');
 const ValidateRegister = require('../../validate/authRegister.validate');
 router.post('/',ValidateRegister.postRegister,async (req,res)=>{
    try{
@@ -11,7 +12,6 @@ router.post('/',ValidateRegister.postRegister,async (req,res)=>{
        const lastname = req.body.lastname;
        const phone = req.body.phone;
        const email = req.body.email;
-       const avatar = 'https://res.cloudinary.com/awi-ln/image/upload/v1626535357/avatar_t6zlhg.png';
        const password = await bcrypt.hash(plainTextPassword,10);
        const newAuthUser = new AuthUser({
            username: username,
@@ -20,7 +20,7 @@ router.post('/',ValidateRegister.postRegister,async (req,res)=>{
            lastname: lastname,
            phone: phone,
            email: email,
-           avatar: avatar
+           avatar: {Array_Img: ['https://res.cloudinary.com/codingclubblog/image/upload/v1627315725/avatar_yhyzcp.jpg'],Array_CloudinaryId: ['avatar_yhyzcp']}
        });
        const auth = await newAuthUser.save();
        if(!auth) throw Error('has a error when save the data');
