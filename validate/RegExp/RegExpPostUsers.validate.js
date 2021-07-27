@@ -1,5 +1,5 @@
-const AuthUser = require('../models/auth-users');
-module.exports.postRegister = async function(req,res, next) {
+const AuthUser = require('../../models/auth-users');
+module.exports.checkRegExpPostUsers = async function(req,res, next) {
     const auth = await AuthUser.find();
     const reg_username = /^[A-z0-9]{0,30}$/;
     const reg_phone = /^0[389][0-9]{8}$/;
@@ -43,7 +43,7 @@ module.exports.postRegister = async function(req,res, next) {
         return res.status(400).send({
             message: 'Invalid phone!'
         });
-    }
+    };
     if(!firstname || typeof firstname !=="string" || reg_firstname.test(firstname) == false){
         return res.status(400).send({
             message: 'Invalid firstname!'

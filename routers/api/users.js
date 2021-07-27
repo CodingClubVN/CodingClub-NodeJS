@@ -5,6 +5,7 @@ const jwt = require('jsonwebtoken');
 const upload = require('../../utils/multer');
 const cloudinary = require('../../utils/cloudinary');
 const checkToken = require('../../validate/checkToken');
+const checkRegExpPut = require('../../validate/RegExp/RegExpPutUsers.validate');
 //Get /:username
 router.get('/:username', async (req, res) => {
     try {
@@ -25,7 +26,7 @@ router.get('/:username', async (req, res) => {
     }
 })
 //Put /:user
-router.put('/:username', checkToken.checkToken, async (req , res) => {
+router.put('/:username', checkToken.checkToken,upload.single('avatar'),checkRegExpPut.checkRegExpPutUsers ,async (req , res) => {
     try {
         const token = req.headers['authorization'].split(' ')[1];
         const user_jwt = jwt.verify(token, process.env.JWT_SECRET);
@@ -34,11 +35,16 @@ router.put('/:username', checkToken.checkToken, async (req , res) => {
         }
         const _id = user_jwt.id;
         const user = await Users.findOne({_id});
+        let result;
+        if (req.file) {
+            result = await cloudinary.uploader.upload(req.file.path);
+        }
         const data = {
             firstname: req.body.firstname || user.firstname,
             lastname: req.body.lastname || user.lastname,
             phone: req.body.phone || user.phone,
-            email: req.body.email || user.email
+            email: req.body.email || user.email,
+            avatar: {imgAvatar: result?.secure_url || user.avatar.imgAvatar, cloudId: result?.public_id || user.avatar.cloudId}
         };
         await Users.updateOne(
             {_id},
@@ -52,4 +58,5 @@ router.put('/:username', checkToken.checkToken, async (req , res) => {
         res.status(400).json({message: err, success: false});
     }
 })
+
 module.exports = router;
