@@ -5,7 +5,7 @@ const bcrypt = require('bcryptjs');
 const AuthUser = require('../../models/auth-users');
 const jwt = require('jsonwebtoken');
 const validateChangePassword = require('../../validate/authChangePassword.validate');
-router.post('/',validateChangePassword.postNewPassword ,async (req,res)=>{
+router.put('/',validateChangePassword.postNewPassword ,async (req,res)=>{
     try{
         const token = req.headers['authorization'].split(' ')[1];
         const newPassword = req.body.newPassword;

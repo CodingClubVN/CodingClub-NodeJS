@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const Image  = require('./data-type/image');
 var authSchema = new mongoose.Schema({
     username: String,
     password: String,
@@ -7,7 +6,7 @@ var authSchema = new mongoose.Schema({
     lastname: String,
     phone : String,
     email: String,
-    avatar: Image,
+    avatar: {imgAvatar: String, cloudId: String},
 })
 var AuthUsers = mongoose.model('AuthUsers',authSchema,'authentic_user');
 module.exports = AuthUsers;

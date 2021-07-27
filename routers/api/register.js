@@ -20,7 +20,7 @@ router.post('/',ValidateRegister.postRegister,async (req,res)=>{
            lastname: lastname,
            phone: phone,
            email: email,
-           avatar: {Array_Img: ['https://res.cloudinary.com/codingclubblog/image/upload/v1627315725/avatar_yhyzcp.jpg'],Array_CloudinaryId: ['avatar_yhyzcp']}
+           avatar: {imgAvatar: 'https://res.cloudinary.com/codingclubblog/image/upload/v1627315725/avatar_yhyzcp.jpg',cloudId: 'avatar_yhyzcp'}
        });
        const auth = await newAuthUser.save();
        if(!auth) throw Error('has a error when save the data');

@@ -13,10 +13,15 @@ const RegisterRouter = require('./routers/api/register');
 const LoginRouter = require('./routers/api/login');
 const ChangePasswordRouter = require('./routers/api/change-password');
 const PostRouter = require('./routers/api/posts');
+const UsersRouter = require('./routers/api/users');
 app.use('/api/posts', PostRouter);
 app.use('/api/auth/register', RegisterRouter);
 app.use('/api/auth/login', LoginRouter);
 app.use('/api/auth/change-password',ChangePasswordRouter);
+app.use('/api/users', UsersRouter);
+
+
+
 //Mongodb
 mongoose.connect(process.env.MONGO_URL_LOCAL,{
     useNewUrlParser: true,
