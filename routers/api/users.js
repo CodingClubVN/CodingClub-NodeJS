@@ -2,24 +2,54 @@ const express =require('express');
 const router = express.Router();
 const Users = require('../../models/auth-users');
 const jwt = require('jsonwebtoken');
+const upload = require('../../utils/multer');
+const cloudinary = require('../../utils/cloudinary');
 const checkToken = require('../../validate/checkToken');
 //Get /:username
 router.get('/:username', async (req, res) => {
     try {
-        const user = await Users.find(
+        const user = await Users.findOne(
             {username: req.params.username}
         )
         if (!user) throw Error('This user does not exist');
         res.status(200).json({
-            username: user[0].username,
-            phone: user[0].phone,
-            email: user[0].email,
-            img_avatar : user[0].avatar.imgAvatar,
-            firstname: user[0].firstname,
-            lastname: user[0].lastname
+            username: user.username,
+            phone: user.phone,
+            email: user.email,
+            imgAvatar : user.avatar.imgAvatar,
+            firstname: user.firstname,
+            lastname: user.lastname
         });
     }catch (err) {
         res.status(400).json({message: err});
+    }
+})
+//Put /:user
+router.put('/:username', checkToken.checkToken, async (req , res) => {
+    try {
+        const token = req.headers['authorization'].split(' ')[1];
+        const user_jwt = jwt.verify(token, process.env.JWT_SECRET);
+        if (user_jwt.username != req.params.username ){
+            res.status(400).json({message: 'Incorrect path', success: false});
+        }
+        const _id = user_jwt.id;
+        const user = await Users.findOne({_id});
+        const data = {
+            firstname: req.body.firstname || user.firstname,
+            lastname: req.body.lastname || user.lastname,
+            phone: req.body.phone || user.phone,
+            email: req.body.email || user.email
+        };
+        await Users.updateOne(
+            {_id},
+            {
+                $set: (data)
+            }
+        )
+       res.status(200).json({message: "User updated successfully!", success : true});
+    }
+    catch (err) {
+        res.status(400).json({message: err, success: false});
     }
 })
 module.exports = router;
