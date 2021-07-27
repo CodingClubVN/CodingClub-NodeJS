@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
 const AuthUser = require('../../models/auth-users');
-const Image = require('../../models/data-type/image');
 const ValidateRegister = require('../../validate/RegExp/RegExpPostUsers.validate');
 router.post('/',ValidateRegister.checkRegExpPostUsers,async (req,res)=>{
    try{

@@ -40,6 +40,7 @@ router.put('/:username', checkToken.checkToken,upload.single('avatar'),checkRegE
             result = await cloudinary.uploader.upload(req.file.path);
         }
         const data = {
+            username: req.body.username || user.username,
             firstname: req.body.firstname || user.firstname,
             lastname: req.body.lastname || user.lastname,
             phone: req.body.phone || user.phone,
