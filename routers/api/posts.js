@@ -13,6 +13,7 @@ router.post('/',checkToken.checkToken,upload.array("image"),async (req, res) =>{
         const user = jwt.verify(token,process.env.JWT_SECRET);
         let path = [];
         let cloudinaryId = [];
+        const length_posts = await Posts.find({username: user.username}).countDocuments();
         for(const file of req.files){
             const result = await cloudinary.uploader.upload(file.path);
             path.push(result.secure_url);
@@ -22,7 +23,8 @@ router.post('/',checkToken.checkToken,upload.array("image"),async (req, res) =>{
             username: user.username,
             image: {Array_Img: path, Array_CloudinaryId: cloudinaryId},
             status: req.body.status,
-            day_post: today
+            day_post: today,
+            post_id: user.username + "-post-" + (length_posts + 1)
         })
         const post = await newPost.save();
         if(!post) throw Error('has a error when save the data');
