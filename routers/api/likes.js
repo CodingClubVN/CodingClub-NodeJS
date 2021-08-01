@@ -55,4 +55,15 @@ router.delete('/', chekToken.checkToken, async (req, res) => {
        res.status(400).json({message: "error", success: false});
     }
 })
+//Get /:post_id
+router.get('/:post_id', async (req, res) => {
+    try {
+        const post_id = req.params.post_id
+        const like = await Likes.findOne({post_id});
+        if(!like) throw Error("Error not likes");
+        res.status(200).json(like);
+    }catch (err) {
+        res.status(400).json({message: err, success: false});
+    }
+})
 module.exports = router;
