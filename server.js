@@ -15,7 +15,7 @@ const ChangePasswordRouter = require('./routers/api/change-password');
 const PostRouter = require('./routers/api/posts');
 const UsersRouter = require('./routers/api/users');
 const LikesRouter = require('./routers/api/likes');
-app.use('/api/likes', LikesRouter);
+app.use('/api/post/likes', LikesRouter);
 app.use('/api/posts', PostRouter);
 app.use('/api/auth/register', RegisterRouter);
 app.use('/api/auth/login', LoginRouter);
