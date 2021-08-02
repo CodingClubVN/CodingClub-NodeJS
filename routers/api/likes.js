@@ -35,15 +35,15 @@ router.post('/',checkToken.checkToken,checkLikes.checkLikes, async (req, res) =>
         }
         res.status(200).json({message: "you liked this post", success: true});
     }catch (err) {
-        res.status(400).json({message: "you can't like this post", success: false});
+        res.status(400).json({message: err, success: false});
     }
 })
 //Delete
-router.delete('/', checkToken.checkToken, async (req, res) => {
+router.delete('/:post_id', checkToken.checkToken, async (req, res) => {
     try {
         const token = req.headers['authorization'].split(' ')[1];
         const user = jwt.verify(token, process.env.JWT_SECRET);
-        const post_id = req.body.post_id;
+        const post_id = req.params.post_id;
         const like = await Likes.findOne({post_id});
         let array  = like.array_username;
         let newArray = array.filter(item => item !== user.username);
@@ -52,7 +52,7 @@ router.delete('/', checkToken.checkToken, async (req, res) => {
         })
         res.status(200).json({message: "you unliked this post", success: true});
     }catch (err) {
-       res.status(400).json({message: "error", success: false});
+       res.status(400).json({message: err, success: false});
     }
 })
 //Get /:post_id

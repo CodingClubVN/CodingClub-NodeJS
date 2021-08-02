@@ -24,7 +24,7 @@ router.post('/',checkToken.checkToken,upload.array("image"),async (req, res) =>{
             image: {Array_Img: path, Array_CloudinaryId: cloudinaryId},
             status: req.body.status,
             day_post: today,
-            post_id: user.username + "-post-" + (length_posts + 1)
+            post_id: Math.random().toString(15).slice(-10)
         })
         const post = await newPost.save();
         if(!post) throw Error('has a error when save the data');

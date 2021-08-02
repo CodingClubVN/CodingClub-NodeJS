@@ -21,7 +21,8 @@ router.post('/', checkToken.checkToken, async (req, res) => {
                 username: user.username,
                 avatar: User.avatar.imgAvatar,
                 message: req.body.message,
-                day_comment: today
+                day_comment: today,
+                id: Math.random().toString(10).slice(-5)
             }
             array.push(data);
             const newComment = new Comments({
@@ -35,7 +36,8 @@ router.post('/', checkToken.checkToken, async (req, res) => {
                 username: user.username,
                 avatar: User.avatar.imgAvatar,
                 message: req.body.message,
-                day_comment: today
+                day_comment: today,
+                id: Math.random().toString(10).slice(-5)
             }
             array.push(newData);
             const data = {
@@ -50,6 +52,19 @@ router.post('/', checkToken.checkToken, async (req, res) => {
             )
         }
         res.status(200).json({message: "you commented on the post", success: true});
+    }catch (err) {
+        res.status(400).json({message: err, success: false});
+    }
+})
+//Delete /:post_id
+router.delete('/:post_id', checkToken.checkToken, async (req, res) => {
+    try {
+        const post_id = req.params.post_id;
+        const comment = await Comments.findOne({post_id});
+        let array = comment.array_comments;
+        let newArray = array.filter(item => item.id !== req.body.id);
+        await Comments.updateOne({post_id},{$set: {array_comments: newArray}});
+        res.status(200).json({message: "You deleted this comment", success: true});
     }catch (err) {
         res.status(400).json({message: err, success: false});
     }
