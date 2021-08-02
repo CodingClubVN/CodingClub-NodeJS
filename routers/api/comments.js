@@ -63,4 +63,28 @@ router.get('/:post_id', async (req, res) => {
         res.status(400).json({message: err, success: false});
     }
 })
+//Update comment /:post_id
+router.put('/:post_id', checkToken.checkToken, async (req, res) => {
+    try {
+        const today = new Date();
+        const post_id = req.params.post_id;
+        const comment = await Comments.findOne({post_id});
+        let array = comment.array_comments;
+        let item = array.filter(item => item.id == req.body.id);
+        console.log(item);
+        const newItem = {
+            username: item[0].username,
+            avatar: item[0].avatar,
+            message: req.body.newMessage,
+            id: item[0].id,
+            day_comment: today
+        }
+        let newArray = array.filter(item => item.id !== req.body.id);
+        newArray.push(newItem);
+        await Comments.updateOne({post_id},{$set: {array_comments: newArray}});
+        res.status(200).json({message: "you updated this comment", success: true});
+    }catch (err) {
+        res.status(400).json({message: err, success: false});
+    }
+})
 module.exports = router;
