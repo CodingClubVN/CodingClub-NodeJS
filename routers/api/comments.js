@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 const Comments = require('../../models/comments');
 const Users = require('../../models/auth-users');
 const checkToken = require('../../validate/checkToken');
+const authenticToken = require('../../validate/authenticToken.validate');
 
 //Post
 router.post('/', checkToken.checkToken, async (req, res) => {
@@ -40,7 +41,7 @@ router.post('/', checkToken.checkToken, async (req, res) => {
     }
 })
 //Delete /:post_id
-router.delete('/:post_id', checkToken.checkToken, async (req, res) => {
+router.delete('/:post_id', checkToken.checkToken,authenticToken.checkAuthenticToken, async (req, res) => {
     try {
         const post_id = req.params.post_id;
         const comment = await Comments.findOne({post_id});
@@ -64,14 +65,13 @@ router.get('/:post_id', async (req, res) => {
     }
 })
 //Update comment /:post_id
-router.put('/:post_id', checkToken.checkToken, async (req, res) => {
+router.put('/:post_id', checkToken.checkToken,authenticToken.checkAuthenticToken, async (req, res) => {
     try {
         const today = new Date();
         const post_id = req.params.post_id;
         const comment = await Comments.findOne({post_id});
         let array = comment.array_comments;
         let item = array.filter(item => item.id == req.body.id);
-        console.log(item);
         const newItem = {
             username: item[0].username,
             avatar: item[0].avatar,
