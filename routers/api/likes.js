@@ -2,10 +2,10 @@ const express = require('express');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
 const Likes = require('../../models/likes');
-const chekToken = require('../../validate/checkToken');
-
+const checkToken = require('../../validate/checkToken');
+const checkLikes = require('../../validate/checkLikes.validate');
 //Post
-router.post('/', chekToken.checkToken, async (req, res) =>{
+router.post('/',checkToken.checkToken,checkLikes.checkLikes, async (req, res) =>{
     try {
         const token = req.headers['authorization'].split(' ')[1];
         const user = jwt.verify(token, process.env.JWT_SECRET);
@@ -39,7 +39,7 @@ router.post('/', chekToken.checkToken, async (req, res) =>{
     }
 })
 //Delete
-router.delete('/', chekToken.checkToken, async (req, res) => {
+router.delete('/', checkToken.checkToken, async (req, res) => {
     try {
         const token = req.headers['authorization'].split(' ')[1];
         const user = jwt.verify(token, process.env.JWT_SECRET);

@@ -12,7 +12,7 @@ module.exports.checkToken = async function (req, res, next) {
             }
         }
     } else {
-        return res.status(400).send(
+        return res.status(401).send(
             {
                 message: "You are not logged in"
             }
