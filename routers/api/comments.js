@@ -52,4 +52,15 @@ router.delete('/:post_id', checkToken.checkToken, async (req, res) => {
         res.status(400).json({message: err, success: false});
     }
 })
+//Get /:post_id
+router.get('/:post_id', async (req, res) => {
+    try {
+        const post_id = req.params.post_id;
+        const comment = await Comments.findOne({post_id});
+        if (!comment) throw Error("error when get comments")
+        res.status(200).json(comment);
+    }catch (err) {
+        res.status(400).json({message: err, success: false});
+    }
+})
 module.exports = router;
