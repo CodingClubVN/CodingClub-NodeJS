@@ -7,6 +7,7 @@ const Likes = require('../../models/likes');
 const Comments = require('../../models/comments');
 const jwt = require('jsonwebtoken')
 const checkToken = require('../../validate/checkToken');
+const authenticTokenPost = require('../../validate/authenticTokenPosts.validate');
 //Post
 router.post('/',checkToken.checkToken,upload.array("image"),async (req, res) =>{
     try {
@@ -71,13 +72,18 @@ router.get('/:user', async (req, res)=>{
     }
 })
 //Delete
-router.delete('/:id',checkToken.checkToken, async (req, res)=>{
+router.delete('/:id',checkToken.checkToken,authenticTokenPost.checkAuthenticTokenPost, async (req, res)=>{
     try{
         const post = await Posts.findById(req.params.id);
+        const post_id = post.post_id;
         for (var id of post.image.Array_CloudinaryId){
             await cloudinary.uploader.destroy(id);
         }
         await post.remove();
+        const like = await Likes.findOne({post_id});
+        const comment = await Comments.findOne({post_id});
+        await like.remove();
+        await comment.remove();
         if (!post) throw Error('has a error when doing the delete data');
         res.status(200).json({success: true});
     }catch (err) {

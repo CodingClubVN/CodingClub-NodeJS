@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 const Comments = require('../../models/comments');
 const Users = require('../../models/auth-users');
 const checkToken = require('../../validate/checkToken');
-const authenticToken = require('../../validate/authenticToken.validate');
+const authenticToken = require('../../validate/authenticTokenComments.validate');
 
 //Post
 router.post('/', checkToken.checkToken, async (req, res) => {
