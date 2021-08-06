@@ -1,12 +1,14 @@
 const express = require('express');
 const router = express.Router();
-AuthUser = require('../../models/auth-users');
+const AuthUser = require('../../models/auth-users');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 require('dotenv').config();
-const validateLogin = require('../../validate/authLogin.validate');
+const validateLogin = require('../../validate/RegExp/authLogin.validate');
+const Session = require('../../models/session');
 router.post('/',validateLogin.postLogin, async (req,res)=>{
     try{
+        const today =new Date();
         const username = req.body.username;
         const password = req.body.password;
         const user = await AuthUser.findOne({username}).lean();
@@ -18,6 +20,12 @@ router.post('/',validateLogin.postLogin, async (req,res)=>{
                 },
                 process.env.JWT_SECRET
             )
+            const newSession = new Session({
+                username: user.username,
+                token: token,
+                created: today
+            })
+            await newSession.save();
             res.status(200).json({token: token, success:true});
         }
         if(await bcrypt.compare(password,user.password)==false) {
