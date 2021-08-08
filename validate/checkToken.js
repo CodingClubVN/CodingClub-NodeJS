@@ -2,7 +2,6 @@ const jwt = require('jsonwebtoken');
 const Session = require('../models/session');
 module.exports.checkToken = async function (req, res, next) {
     const token = req.headers['authorization'].split(' ')[1];
-    console.log(token);
     if (token && typeof token == "string" && token.length > 20) {
         const user = jwt.verify(token, process.env.JWT_SECRET);
         const username = user.username;

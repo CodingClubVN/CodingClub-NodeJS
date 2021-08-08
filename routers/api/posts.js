@@ -23,12 +23,15 @@ router.post('/',checkToken.checkToken,upload.array("image"),async (req, res) =>{
             cloudinaryId.push(result.public_id);
         }
         const post_id = Math.random().toString(15).slice(-10);
+        const string = String(req.body.status);
+        let theme = checkTheme(string.toLowerCase());
         const newPost = new Posts({
             username: user.username,
             image: {Array_Img: path, Array_CloudinaryId: cloudinaryId},
             status: req.body.status,
             day_post: today,
-            post_id: post_id
+            post_id: post_id,
+            theme: theme
         })
         const post = await newPost.save();
         if(!post) throw Error('has a error when save the data');
@@ -90,4 +93,47 @@ router.delete('/:id',checkToken.checkToken,authenticTokenPost.checkAuthenticToke
         res.status(400).json({message: err,success: false});
     }
 })
+
+function checkTheme(str){
+    if(str.search('html') !=-1) {
+        return 'HTML5';
+    }
+    if (str.search('css') !=-1) {
+        return 'CSS3'
+    }
+    if (str.search('javascript') !=-1) {
+        return 'JavaScript';
+    }
+    if (str.search('nodejs') !=-1){
+        return 'NodeJS';
+    }
+    if (str.search('angular') !=-1){
+        return 'Angular';
+    }
+    if (str.search('reactjs') !=-1) {
+        return 'ReactJS';
+    }
+    if (str.search('vuejs') !=-1) {
+        return 'VueJS';
+    }
+    if (str.search('typescript') !=-1) {
+        return 'TypeScript';
+    }
+    if (str.search('python') !=-1) {
+        return 'Python';
+    }
+    if (str.search('java') !=-1) {
+        return 'Java';
+    }
+    if (str.search('c#') !=-1) {
+        return 'C#';
+    }
+    if (str.search(' c ') !=-1) {
+        return 'C';
+    }
+    if (str.search('c++') !=-1) {
+        return 'C++';
+    }
+    return 'Entertainment'
+}
 module.exports = router;

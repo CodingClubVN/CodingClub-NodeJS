@@ -6,6 +6,7 @@ var postSchema = new mongoose.Schema({
     status: String,
     post_id: String,
     day_post: Date,
+    theme: String,
 })
 
 var Posts = mongoose.model('Posts',postSchema,'posts');
