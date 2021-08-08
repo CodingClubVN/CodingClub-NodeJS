@@ -16,7 +16,6 @@ router.post('/',checkToken.checkToken,upload.array("image"),async (req, res) =>{
         const user = jwt.verify(token,process.env.JWT_SECRET);
         let path = [];
         let cloudinaryId = [];
-        const length_posts = await Posts.find({username: user.username}).countDocuments();
         for(const file of req.files){
             const result = await cloudinary.uploader.upload(file.path);
             path.push(result.secure_url);
@@ -49,7 +48,7 @@ router.post('/',checkToken.checkToken,upload.array("image"),async (req, res) =>{
         await newComment.save();
         res.status(200).json({message: 'status has been posted', success: true});
     }catch (err) {
-        res.status(400).json({massage: err,success: false});
+        res.status(400).json({message: err,success: false});
     }
 })
 //Get
@@ -93,47 +92,33 @@ router.delete('/:id',checkToken.checkToken,authenticTokenPost.checkAuthenticToke
         res.status(400).json({message: err,success: false});
     }
 })
-
+//Get /:theme
+router.get('/theme/:theme', async (req, res) => {
+    try {
+        const theme = req.params.theme;
+        const posts = await Posts.find();
+        let array_posts = [];
+        for (let item of posts){
+            for (let i of item.theme){
+                if(i == theme){
+                    array_posts.push(item);
+                }
+            }
+        }
+        if (!posts) throw Error("error when load data");
+        res.status(200).json(array_posts);
+    }catch (err) {
+        res.status(400).json({message: err, success: false});
+    }
+})
 function checkTheme(str){
-    if(str.search('html') !=-1) {
-        return 'HTML5';
+    let array_theme = [];
+    const a = ['html','css','javascript','nodejs','angular', 'reactjs','vuejs','typescript','python','java','c#',' c ', 'c++']
+    for (let i= 0; i<a.length; i++){
+        if(str.indexOf(a[i]) !== -1){
+            array_theme.push(a[i].split(' ').join(''));
+        }
     }
-    if (str.search('css') !=-1) {
-        return 'CSS3'
-    }
-    if (str.search('javascript') !=-1) {
-        return 'JavaScript';
-    }
-    if (str.search('nodejs') !=-1){
-        return 'NodeJS';
-    }
-    if (str.search('angular') !=-1){
-        return 'Angular';
-    }
-    if (str.search('reactjs') !=-1) {
-        return 'ReactJS';
-    }
-    if (str.search('vuejs') !=-1) {
-        return 'VueJS';
-    }
-    if (str.search('typescript') !=-1) {
-        return 'TypeScript';
-    }
-    if (str.search('python') !=-1) {
-        return 'Python';
-    }
-    if (str.search('java') !=-1) {
-        return 'Java';
-    }
-    if (str.search('c#') !=-1) {
-        return 'C#';
-    }
-    if (str.search(' c ') !=-1) {
-        return 'C';
-    }
-    if (str.search('c++') !=-1) {
-        return 'C++';
-    }
-    return 'Entertainment'
+    return array_theme;
 }
 module.exports = router;
