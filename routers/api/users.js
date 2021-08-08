@@ -59,5 +59,18 @@ router.put('/:username', checkToken.checkToken,upload.single('avatar'),checkRegE
         res.status(400).json({message: err, success: false});
     }
 })
-
+//Get ALl users
+router.get('/', async (req, res) => {
+    try {
+        let array_users = [];
+        const users = await Users.find();
+        for(let item of users){
+            array_users.push({username: item.username, avatar: item.avatar.imgAvatar});
+        }
+        if(!users) throw Error("error when load users");
+        res.status(200).json(array_users);
+    }catch (err) {
+        res.status(400).json({message: err, success: false});
+    }
+})
 module.exports = router;
