@@ -111,6 +111,30 @@ router.get('/theme/:theme', async (req, res) => {
         res.status(400).json({message: err, success: false});
     }
 })
+router.get('/likes/trending', async (req, res) => {
+    try {
+        const likes = await Likes.find();
+        const posts = await Posts.find();
+        let array_trending = [];
+        let sort_likes = [];
+        sort_likes = likes;
+        sort_likes.sort(function(a,b){return(b.array_username.length - a.array_username.length)});
+        let a = sort_likes.slice(0, 5);
+        for (let i of a){
+            for (let item of posts){
+                if(item.post_id == i.post_id){
+                    array_trending.push(item);
+                }
+            }
+        }
+        res.status(200).json(array_trending);
+    }catch (err) {
+        res.status(400).json({message: err, success: false});
+    }
+})
+module.exports = router;
+
+
 function checkTheme(str){
     let array_theme = [];
     const a = ['html','css','javascript','nodejs','angular', 'reactjs','vuejs','typescript','python','java','c#',' c ', 'c++']
@@ -121,4 +145,3 @@ function checkTheme(str){
     }
     return array_theme;
 }
-module.exports = router;
