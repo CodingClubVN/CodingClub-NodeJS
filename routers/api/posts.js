@@ -119,7 +119,7 @@ router.get('/likes/trending', async (req, res) => {
         let sort_likes = [];
         sort_likes = likes;
         sort_likes.sort(function(a,b){return(b.array_username.length - a.array_username.length)});
-        let a = sort_likes.slice(0, 5);
+        let a = sort_likes.slice(0, 2);
         for (let i of a){
             for (let item of posts){
                 if(item.post_id == i.post_id){
