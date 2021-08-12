@@ -5,6 +5,7 @@ const upload = require('../../utils/multer');
 const Posts = require('../../models/posts');
 const Likes = require('../../models/likes');
 const Comments = require('../../models/comments');
+const Users = require('../../models/auth-users');
 const jwt = require('jsonwebtoken')
 const checkToken = require('../../validate/checkToken');
 const authenticTokenPost = require('../../validate/authenticTokenPosts.validate');
@@ -24,8 +25,10 @@ router.post('/',checkToken.checkToken,upload.array("image"),async (req, res) =>{
         const post_id = Math.random().toString(15).slice(-10);
         const string = String(req.body.status);
         let theme = checkTheme(string.toLowerCase());
+        const User = await Users.findOne({username: user.username});
         const newPost = new Posts({
             username: user.username,
+            avatar: User.avatar.imgAvatar,
             image: {Array_Img: path, Array_CloudinaryId: cloudinaryId},
             status: req.body.status,
             day_post: today,
@@ -119,14 +122,25 @@ router.get('/likes/trending', async (req, res) => {
         let sort_likes = [];
         sort_likes = likes;
         sort_likes.sort(function(a,b){return(b.array_username.length - a.array_username.length)});
-        let a = sort_likes.slice(0, 2);
+        let a = sort_likes.slice(0, 4);
         for (let i of a){
             for (let item of posts){
                 if(item.post_id == i.post_id){
-                    array_trending.push(item);
+                    let like = await Likes.findOne({post_id: item.post_id});
+                    let comment = await Comments.findOne({post_id: item.post_id});
+                    let data = {
+                        username: item.username,
+                        avatar: item.avatar,
+                        image: item.image.Array_Img,
+                        status: item.status,
+                        countLikes: like.array_username.length,
+                        countComment: comment.array_comments.length,
+                    }
+                    array_trending.push(data);
                 }
             }
         }
+
         res.status(200).json(array_trending);
     }catch (err) {
         res.status(400).json({message: err, success: false});
