@@ -133,7 +133,7 @@ router.get('/likes/trending', async (req, res) => {
                         avatar: item.avatar,
                         image: item.image.Array_Img,
                         status: item.status,
-                        countLikes: like.array_username.length,
+                        countLike: like.array_username.length,
                         countComment: comment.array_comments.length,
                     }
                     array_trending.push(data);
