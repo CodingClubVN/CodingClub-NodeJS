@@ -17,6 +17,7 @@ const UsersRouter = require('./routers/api/users');
 const LikesRouter = require('./routers/api/likes');
 const CommentsRouter = require('./routers/api/comments');
 const LogoutRouter = require('./routers/api/logout');
+const ContactRouter = require('./routers/api/contacts');
 app.use('/api/post/comments', CommentsRouter);
 app.use('/api/post/likes', LikesRouter);
 app.use('/api/auth/logout', LogoutRouter);
@@ -25,8 +26,7 @@ app.use('/api/auth/register', RegisterRouter);
 app.use('/api/auth/login', LoginRouter);
 app.use('/api/auth/change-password',ChangePasswordRouter);
 app.use('/api/users', UsersRouter);
-
-
+app.use('/api/contacts',ContactRouter);
 
 //Mongodb
 mongoose.connect(process.env.MONGO_URL_LOCAL,{
