@@ -25,10 +25,8 @@ router.post('/',checkToken.checkToken,upload.array("image"),async (req, res) =>{
         const post_id = Math.random().toString(15).slice(-10);
         const string = String(req.body.status);
         let theme = checkTheme(string.toLowerCase());
-        const User = await Users.findOne({username: user.username});
         const newPost = new Posts({
-            username: user.username,
-            avatar: User.avatar.imgAvatar,
+            id_username: user.id,
             image: {Array_Img: path, Array_CloudinaryId: cloudinaryId},
             status: req.body.status,
             day_post: today,
@@ -57,21 +55,54 @@ router.post('/',checkToken.checkToken,upload.array("image"),async (req, res) =>{
 //Get
 router.get('/', async (req, res) =>{
     try{
+        let res_posts = [];
         const posts = await Posts.find();
         if(!posts) throw Error("Not Posts");
-        res.status(200).json(posts);
+        for (let item of posts){
+            let user = await Users.findById(item.id_username);
+            let data = {
+                username: user.username,
+                avatar: user.avatar.imgAvatar,
+                image: item.image,
+                status: item.status,
+                day_post: item.day_post,
+                theme: item.theme
+            }
+            res_posts.push(data);
+        }
+        res.status(200).json(res_posts);
     }catch (err) {
         res.status(400).json({message: err})
     }
 })
 //Get /:user
-router.get('/:user', async (req, res)=>{
+router.get('/:username', async (req, res)=>{
     try{
-        const post = await Posts.find(
-            {username: req.params.user}
+        let posts_username = [];
+        let id_username = '';
+        const users = await Users.find();
+        for (let user of users) {
+            if (user.username == req.params.username){
+                id_username = user._id;
+            }
+        }
+        const posts = await Posts.find(
+            {id_username: id_username}
         )
-        if (!post) throw Error('This post does not exist');
-        res.status(200).json(post);
+        if (!posts) throw Error('This post does not exist');
+        for (let item of posts){
+            let user = await Users.findById(item.id_username);
+            let data = {
+                username: user.username,
+                avatar: user.avatar.imgAvatar,
+                image: item.image,
+                status: item.status,
+                day_post: item.day_post,
+                theme: item.theme
+            }
+            posts_username.push(data);
+        }
+        res.status(200).json(posts_username);
     }catch (err) {
         res.status(400).json({message: err});
     }
@@ -104,7 +135,16 @@ router.get('/theme/:theme', async (req, res) => {
         for (let item of posts){
             for (let i of item.theme){
                 if(i == theme){
-                    array_posts.push(item);
+                    let user = await Users.findById(item.id_username);
+                    let data = {
+                        username: user.username,
+                        avatar: user.avatar.imgAvatar,
+                        image: item.image,
+                        status: item.status,
+                        day_post: item.day_post,
+                        theme: item.theme
+                    }
+                    array_posts.push(data);
                 }
             }
         }
@@ -126,11 +166,12 @@ router.get('/likes/trending', async (req, res) => {
         for (let i of a){
             for (let item of posts){
                 if(item.post_id == i.post_id){
+                    let user = await Users.findById(item.id_username);
                     let like = await Likes.findOne({post_id: item.post_id});
                     let comment = await Comments.findOne({post_id: item.post_id});
                     let data = {
-                        username: item.username,
-                        avatar: item.avatar,
+                        username: user.username,
+                        avatar: user.avatar.imgAvatar,
                         image: item.image.Array_Img,
                         status: item.status,
                         countLike: like.array_username.length,
