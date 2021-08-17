@@ -6,8 +6,8 @@ module.exports.checkLikes = async function (req, res, next) {
     const post_id = req.body.post_id;
     const like = await Likes.findOne({post_id});
     if (like){
-        for (let user of like.array_username){
-            if(user == User.username){
+        for (let id of like.array_id){
+            if(id == User.id){
                 return res.status(417).json({message: "you liked this post", success: false});
             }
         }

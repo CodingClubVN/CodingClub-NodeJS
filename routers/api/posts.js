@@ -37,7 +37,7 @@ router.post('/',checkToken.checkToken,upload.array("image"),async (req, res) =>{
         if(!post) throw Error('has a error when save the data');
         //Create Like
         const newLikes = new Likes({
-            array_username: [],
+            array_id: [],
             post_id: post_id
         });
         await newLikes.save();
