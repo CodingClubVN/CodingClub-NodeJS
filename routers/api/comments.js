@@ -14,12 +14,10 @@ router.post('/', checkToken.checkToken, async (req, res) => {
         const user = jwt.verify(token, process.env.JWT_SECRET);
         const post_id = req.body.post_id;
         const _id = user.id
-        const User = await Users.findOne({_id});
         const comment = await Comments.findOne({post_id});
         let array = comment.array_comments;
         const newData= {
-            username: user.username,
-            avatar: User.avatar.imgAvatar,
+            id_user: _id,
             message: req.body.message,
             day_comment: today,
             id: Math.random().toString(10).slice(-5)
@@ -56,10 +54,25 @@ router.delete('/:post_id', checkToken.checkToken,authenticToken.checkAuthenticTo
 //Get /:post_id
 router.get('/:post_id', async (req, res) => {
     try {
+        let array_comments = [];
         const post_id = req.params.post_id;
         const comment = await Comments.findOne({post_id});
         if (!comment) throw Error("error when get comments")
-        res.status(200).json(comment);
+        for (let item of comment.array_comments){
+            let user = await Users.findById(item.id_user);
+            let data = {
+                username: user.username,
+                avatar: user.avatar.imgAvatar,
+                message: item.message,
+                day_comment: item.day_comment,
+                id: item.id
+            }
+            array_comments.push(data);
+        }
+        res.status(200).json({
+            post_id: comment.post_id,
+            array_comments: array_comments
+        });
     }catch (err) {
         res.status(400).json({message: err, success: false});
     }
@@ -73,8 +86,7 @@ router.put('/:post_id', checkToken.checkToken,authenticToken.checkAuthenticToken
         let array = comment.array_comments;
         let item = array.filter(item => item.id == req.body.id);
         const newItem = {
-            username: item[0].username,
-            avatar: item[0].avatar,
+            id_user: item[0].id_user,
             message: req.body.newMessage,
             id: item[0].id,
             day_comment: today

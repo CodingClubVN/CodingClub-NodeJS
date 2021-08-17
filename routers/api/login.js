@@ -30,7 +30,7 @@ router.post('/',validateLogin.postLogin, async (req,res)=>{
                 process.env.JWT_SECRET
             )
             const newSession = new Session({
-                username: user.username,
+                username_id: user._id,
                 token: token,
                 created: today
             })

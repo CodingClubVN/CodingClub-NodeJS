@@ -8,7 +8,7 @@ module.exports.checkAuthenticToken = async function (req, res, next) {
     const comment = await Comments.findOne({post_id});
     const array = comment.array_comments;
     let item = array.filter(item => item.id == req.body.id);
-    if (item[0].username !== user.username){
+    if (item[0].id_user !== user.id){
         return res.status(401).json({message: "you do not have this authority", success: false});
     }
     next();

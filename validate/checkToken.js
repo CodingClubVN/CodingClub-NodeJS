@@ -4,7 +4,7 @@ module.exports.checkToken = async function (req, res, next) {
     const token = req.headers['authorization'].split(' ')[1];
     if (token && typeof token == "string" && token.length > 20) {
         const user = jwt.verify(token, process.env.JWT_SECRET);
-        const username = user.username;
+        const id = user._id;
         const session = await Session.find();
         let count = await Session.find().countDocuments();
         if(count == 0){
@@ -15,7 +15,7 @@ module.exports.checkToken = async function (req, res, next) {
             )
         }else {
             for (let a of session) {
-                if (a.username == username && a.token == token) {
+                if (a.username_id == id && a.token == token) {
                     next();
                 }
             }

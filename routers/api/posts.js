@@ -61,12 +61,14 @@ router.get('/', async (req, res) =>{
         for (let item of posts){
             let user = await Users.findById(item.id_username);
             let data = {
+                _id: item._id,
                 username: user.username,
                 avatar: user.avatar.imgAvatar,
                 image: item.image,
                 status: item.status,
                 day_post: item.day_post,
-                theme: item.theme
+                theme: item.theme,
+                post_id: item.post_id
             }
             res_posts.push(data);
         }
@@ -93,12 +95,14 @@ router.get('/:username', async (req, res)=>{
         for (let item of posts){
             let user = await Users.findById(item.id_username);
             let data = {
+                _id: item._id,
                 username: user.username,
                 avatar: user.avatar.imgAvatar,
                 image: item.image,
                 status: item.status,
                 day_post: item.day_post,
-                theme: item.theme
+                theme: item.theme,
+                post_id: item.post_id
             }
             posts_username.push(data);
         }
@@ -137,6 +141,8 @@ router.get('/theme/:theme', async (req, res) => {
                 if(i == theme){
                     let user = await Users.findById(item.id_username);
                     let data = {
+                        post_id: item.post_id,
+                        _id: item._id,
                         username: user.username,
                         avatar: user.avatar.imgAvatar,
                         image: item.image,
@@ -161,7 +167,7 @@ router.get('/likes/trending', async (req, res) => {
         let array_trending = [];
         let sort_likes = [];
         sort_likes = likes;
-        sort_likes.sort(function(a,b){return(b.array_username.length - a.array_username.length)});
+        sort_likes.sort(function(a,b){return(b.array_id.length - a.array_id.length)});
         let a = sort_likes.slice(0, 4);
         for (let i of a){
             for (let item of posts){
@@ -170,11 +176,13 @@ router.get('/likes/trending', async (req, res) => {
                     let like = await Likes.findOne({post_id: item.post_id});
                     let comment = await Comments.findOne({post_id: item.post_id});
                     let data = {
+                        post_id: item.post_id,
+                        _id: item._id,
                         username: user.username,
                         avatar: user.avatar.imgAvatar,
                         image: item.image.Array_Img,
                         status: item.status,
-                        countLike: like.array_username.length,
+                        countLike: like.array_id.length,
                         countComment: comment.array_comments.length,
                     }
                     array_trending.push(data);
