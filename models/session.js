@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 var sessionSchema = new mongoose.Schema({
-    username: String,
+    username_id: String,
     token: String,
     created: Date
 })

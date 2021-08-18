@@ -7,8 +7,8 @@ router.get('/', checkToken.checkToken, async (req, res) =>{
     try {
         const token  = req.headers['authorization'].split(' ')[1];
         const user = jwt.verify(token, process.env.JWT_SECRET);
-        const username = user.username;
-        const session = await Session.findOne({username});
+        const username_id = user.id;
+        const session = await Session.findOne({username_id: username_id});
         await session.remove();
         res.status(200).json({message: "you are logged out", success: true});
     }catch (err) {

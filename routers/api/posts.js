@@ -195,6 +195,53 @@ router.get('/likes/trending', async (req, res) => {
         res.status(400).json({message: err, success: false});
     }
 })
+//Put /:post_id
+router.put('/:id',checkToken.checkToken,authenticTokenPost.checkAuthenticTokenPost,upload.array('newImage'),async (req, res) => {
+    try {
+        const _id  = req.params.id;
+        const today = new Date();
+        const post = await Posts.findById(req.params.id);
+        let path = [];
+        let cloudinaryId = [];
+        if(req.files) {
+            for(const file of req.files){
+                const result = await cloudinary.uploader.upload(file.path);
+                path.push(result.secure_url);
+                cloudinaryId.push(result.public_id);
+            }
+        }
+        if (path.length == 0){
+            path = post.image.Array_Img;
+            cloudinaryId = post.image.Array_CloudinaryId;
+        }else {
+            for (var id of post.image.Array_CloudinaryId){
+                await cloudinary.uploader.destroy(id);
+            }
+        }
+        let theme;
+        if (req.body.newStatus) {
+            const string = String(req.body.newStatus);
+            theme = checkTheme(string.toLowerCase());
+        }else {
+            theme = post.theme;
+        }
+        const data = {
+            image: {Array_Img: path, Array_CloudinaryId: cloudinaryId},
+            status: req.body.newStatus || post.status,
+            day_post: today,
+            theme: theme
+        }
+        await Posts.updateOne(
+            {_id},
+            {
+                $set: (data)
+            }
+        )
+        res.status(200).json({message:"Post updated successfully!", success: true});
+    }catch (err) {
+        res.status(400).json({message: err, success: false});
+    }
+})
 module.exports = router;
 
 

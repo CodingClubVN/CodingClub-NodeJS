@@ -18,7 +18,7 @@ router.post('/',validateLogin.postLogin, async (req,res)=>{
         if(await bcrypt.compare(password,user.password)){
             const sessions = await Session.find();
             for (let item  of sessions){
-                if(username == item.username){
+                if(user._id == item.username_id){
                    return res.status(200).json({token: item.token,success: true});
                 }
             }
