@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 var notifiesSchema = new mongoose.Schema({
-    id_username: String,
+    id_user: String,
     username: String,
     list_notifies: []
 })

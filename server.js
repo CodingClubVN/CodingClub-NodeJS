@@ -18,6 +18,8 @@ const LikesRouter = require('./routers/api/likes');
 const CommentsRouter = require('./routers/api/comments');
 const LogoutRouter = require('./routers/api/logout');
 const ContactRouter = require('./routers/api/contacts');
+const FriendRouter = require('./routers/api/friends');
+app.use('/api/friends',FriendRouter);
 app.use('/api/post/comments', CommentsRouter);
 app.use('/api/post/likes', LikesRouter);
 app.use('/api/auth/logout', LogoutRouter);

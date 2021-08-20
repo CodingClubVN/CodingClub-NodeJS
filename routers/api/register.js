@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
 const AuthUser = require('../../models/auth-users');
+const Friends = require('../../models/friends');
+const Notifies = require('../../models/notifies');
 const ValidateRegister = require('../../validate/RegExp/RegExpPostUsers.validate');
 router.post('/',ValidateRegister.checkRegExpPostUsers,async (req,res)=>{
    try{
@@ -23,6 +25,20 @@ router.post('/',ValidateRegister.checkRegExpPostUsers,async (req,res)=>{
        });
        const auth = await newAuthUser.save();
        if(!auth) throw Error('has a error when save the data');
+       //create friends
+       const friends = new Friends({
+           id_user: auth._id,
+           username: username,
+           list_friends: []
+       })
+       await friends.save();
+       //create notifies
+       const notifies = new Notifies({
+           id_user: auth._id,
+           username: username,
+           list_notifies: []
+       })
+       await notifies.save();
        res.status(200).json({success: true});
    }catch (err) {
        res.status(400).json({msg : err});
