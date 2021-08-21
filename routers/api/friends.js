@@ -27,6 +27,26 @@ router.post('/invite',checkToken.checkToken,async (req, res) => {
         res.status(400).json({message: err, success: false});
     }
 })
+//Get notifies /:username
+router.get('/invite/:username',async (req, res) => {
+    try {
+        const notifies = await Notifies.findOne({username: req.params.username});
+        if (!notifies) throw Error("Error!");
+        let list_invite = [];
+        for(let item of notifies.list_notifies){
+            let user = await Users.findById(item);
+            let data = {
+                username:  user.username,
+                avatar: user.avatar.imgAvatar
+            }
+            list_invite.push(data);
+        }
+        res.status(200).json(list_invite);
+    }catch (err) {
+        res.status(400).json({message: err, success: false});
+    }
+})
+//Post accept
 module.exports = router;
 
 
