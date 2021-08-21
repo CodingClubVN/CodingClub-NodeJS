@@ -47,6 +47,34 @@ router.get('/invite/:username',async (req, res) => {
     }
 })
 //Post accept
+router.post('/accept/:username',checkToken.checkToken,async (req, res) => {
+    try {
+        const token = req.headers['authorization'].split(' ')[1];
+        const user = jwt.verify(token, process.env.JWT_SECRET);
+        const friends = await Friends.findOne({username: user.username});
+        const friend = await Users.findOne({username: req.params.username});
+        const notifies = await Notifies.findOne({username: user.username});
+        const array_notifies = notifies.list_notifies;
+        const newArray = array_notifies.filter(item => item !== friend._id.toString());
+        await Notifies.updateOne(
+            {username: user.username},
+            {
+                $set: {list_notifies: newArray}
+            }
+        )
+        let array = friends.list_friends;
+        array.push(friend._id.toString());
+        await Friends.updateOne(
+            {username: user.username},
+            {
+                $set: {list_friends: array}
+            }
+        )
+        res.status(200).json({message: "You have accepted "+ req.params.username +" is friend request",success: true});
+    }catch (err) {
+        res.status(400).json({message: err,success: false});
+    }
+})
 module.exports = router;
 
 
