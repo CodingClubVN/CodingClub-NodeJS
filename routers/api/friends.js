@@ -75,6 +75,24 @@ router.post('/accept/:username',checkToken.checkToken,async (req, res) => {
         res.status(400).json({message: err,success: false});
     }
 })
+router.get('/:username', async (req, res) => {
+    try {
+        const friends = await Friends.findOne({username: req.params.username});
+        if (!friends) throw Error("Error!");
+        let array_friend = [];
+        for (let item of friends.list_friends){
+            let user = await Users.findById(item);
+            let newData = {
+                username: user.username,
+                avatar: user.avatar.imgAvatar
+            }
+            array_friend.push(newData);
+        }
+        res.status(200).json(array_friend);
+    }catch (err) {
+        res.status(400).json({message: err,success: false});
+    }
+})
 module.exports = router;
 
 
