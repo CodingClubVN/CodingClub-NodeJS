@@ -14,10 +14,20 @@ module.exports.checkToken = async function (req, res, next) {
                 }
             )
         }else {
+            let array = [];
             for (let a of session) {
                 if (a.username_id == id && a.token == token) {
-                    next();
+                    array.push(a);
                 }
+            }
+            if (array.length === 0){
+                return res.status(401).send(
+                    {
+                        message: "You are not logged in"
+                    }
+                )
+            }else {
+                next();
             }
         }
     } else {

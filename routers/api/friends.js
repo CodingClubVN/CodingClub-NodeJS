@@ -5,9 +5,9 @@ const Friends = require('../../models/friends');
 const Users = require('../../models/auth-users');
 const Notifies = require('../../models/notifies');
 const checkToken = require('../../validate/checkToken');
-
+const checkFriends = require('../../validate/checkInvite.validate');
 //Post
-router.post('/invite',checkToken.checkToken,async (req, res) => {
+router.post('/invite',checkToken.checkToken,checkFriends.checkFriends,async (req, res) => {
     try {
         const today = new Date();
         const token = req.headers['authorization'].split(' ')[1];
