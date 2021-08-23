@@ -47,12 +47,12 @@ router.get('/invite/:username',async (req, res) => {
     }
 })
 //Post accept
-router.post('/accept/:username',checkToken.checkToken,async (req, res) => {
+router.post('/accept/:username_friend',checkToken.checkToken,async (req, res) => {
     try {
         const token = req.headers['authorization'].split(' ')[1];
         const user = jwt.verify(token, process.env.JWT_SECRET);
         const friends = await Friends.findOne({username: user.username});
-        const friend = await Users.findOne({username: req.params.username});
+        const friend = await Users.findOne({username: req.params.username_friend});
         const notifies = await Notifies.findOne({username: user.username});
         const array_notifies = notifies.list_notifies;
         const newArray = array_notifies.filter(item => item !== friend._id.toString());
@@ -144,7 +144,7 @@ router.delete('/unfriend/:username_friend',checkToken.checkToken,async (req, res
                 $set: {list_friends: array}
             }
         )
-        res.status(200).json({message: "you unfriended" + user_friend.username,success: true});
+        res.status(200).json({message: "you unfriended " + user_friend.username,success: true});
     }catch (err) {
         res.status(400).json({message: err, success: false});
     }
