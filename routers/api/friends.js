@@ -93,6 +93,43 @@ router.get('/:username', async (req, res) => {
         res.status(400).json({message: err,success: false});
     }
 })
+router.delete('/refuse/:username_notify',checkToken.checkToken,async (req, res) => {
+    try {
+        const token  = req.headers['authorization'].split(' ')[1];
+        const user = jwt.verify(token, process.env.JWT_SECRET);
+        const notifies = await Notifies.findOne({username: user.username});
+        if (!notifies) throw Error("Error!");
+        const user_notify = await Users.findOne({username: req.params.username_notify});
+        let array = notifies.list_notifies.filter(item => item !== user_notify._id.toString());
+        await Notifies.updateOne(
+            {username: user.username},
+            {
+                $set: {list_notifies: array}
+            }
+        )
+        res.status(200).json({message: "you declined your invitation of "+ user_notify.username,success: true});
+    }catch (err) {
+        res.status(400).json({message: err, success: false});
+    }
+})
+router.delete('/cancel/:username_friend',checkToken.checkToken ,async (req, res) => {
+    try {
+        const token = req.headers['authorization'].split(' ')[1];
+        const user = jwt.verify(token, process.env.JWT_SECRET);
+        const notifies = await Notifies.findOne({username: req.params.username_friend});
+        if (!notifies) throw Error("Error!");
+        let array = notifies.list_notifies.filter(item => item !== user.id);
+        await Notifies.updateOne(
+            {username: req.params.username_friend},
+            {
+                $set: {list_notifies: array}
+            }
+        )
+        res.status(200).json({message: "you canceled the friend request!", success: true});
+    }catch (err) {
+        res.status(400).json({message: err, success: false});
+    }
+})
 module.exports = router;
 
 
