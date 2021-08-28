@@ -73,4 +73,21 @@ router.get('/', async (req, res) => {
         res.status(400).json({message: err, success: false});
     }
 })
+//Post search
+router.post('/search',async (req, res) =>{
+    try {
+        const str = String(req.body.key_word);
+        let array_user = [];
+        const users = await Users.find();
+        for (let user of users){
+            if(user.username.indexOf(str.toLowerCase()) !== -1){
+                array_user.push({username: user.username, avatar: user.avatar.imgAvatar});
+            }
+        }
+        res.status(200).json(array_user);
+    }catch (err) {
+        res.status(400).json({message: err, success: false});
+    }
+})
 module.exports = router;
+
