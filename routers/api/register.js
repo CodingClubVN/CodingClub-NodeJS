@@ -4,6 +4,7 @@ const bcrypt = require('bcryptjs');
 const AuthUser = require('../../models/auth-users');
 const Friends = require('../../models/friends');
 const Notifies = require('../../models/notifies');
+const Invitation = require('../../models/invitation');
 const ValidateRegister = require('../../validate/RegExp/RegExpPostUsers.validate');
 router.post('/',ValidateRegister.checkRegExpPostUsers,async (req,res)=>{
    try{
@@ -39,6 +40,13 @@ router.post('/',ValidateRegister.checkRegExpPostUsers,async (req,res)=>{
            list_notifies: []
        })
        await notifies.save();
+       //create invitation
+       const invitation = new Invitation({
+           id_user: auth._id,
+           username: username,
+           list_invitation: []
+       })
+       await invitation.save();
        res.status(200).json({success: true});
    }catch (err) {
        res.status(400).json({msg : err});
